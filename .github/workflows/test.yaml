@@ -1,14 +1,20 @@
-name: Hello World Workflow
+name: Autobuild for Docker
 
-on: [push, repository_dispatch, workflow_dispatch]
+on: [push, workflow_dispatch, repository_dispatch]
 
 jobs:
   build:
     runs-on: self-hosted
-
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v4
-
-    - name: Print Hello World
-      run: echo "Hello, World!"
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Login to the registry
+        run: registry-login "${{ secrets.DOCKER_USERNAME }}" "${{ secrets.DOCKER_PASSWORD }}" "${{ secrets.DOCKER_HOST }}"
+      - name: Build the image
+        run: |
+          buildctl build \
+            --frontend dockerfile.v0 \
+            --local context=. \
+            --local dockerfile=. \
+            --opt platform=linux/amd64 \
+            --output type=image,name="${{ secrets.DOCKER_TAG }}",push=true,store=false
