@@ -1,6 +1,6 @@
 name: Hello World Workflow
 
-on: [push]
+on: [push, repository_dispatch, workflow_dispatch]
 
 jobs:
   build:
