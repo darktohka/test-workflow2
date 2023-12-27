@@ -17,4 +17,4 @@ jobs:
             --local context=. \
             --local dockerfile=. \
             --opt platform=linux/amd64 \
-            --output type=image,"name=${{ secrets.DOCKER_TAG }}",push=true,store=false
+            --output type=image,\"name=${{ secrets.DOCKER_TAG }}\",push=true,store=false
